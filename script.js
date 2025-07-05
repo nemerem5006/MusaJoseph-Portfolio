@@ -39,6 +39,31 @@ document.addEventListener('DOMContentLoaded', function () {
         },
     });
 
+    // --- Partners Carousel ---
+    const partnersSwiper = new Swiper('.partners-swiper', {
+        loop: true,
+        autoplay: {
+            delay: 2500,
+            disableOnInteraction: false,
+        },
+        slidesPerView: 2,
+        spaceBetween: 20,
+        breakpoints: {
+            640: {
+                slidesPerView: 3,
+                spaceBetween: 30,
+            },
+            768: {
+                slidesPerView: 4,
+                spaceBetween: 40,
+            },
+            1024: {
+                slidesPerView: 5,
+                spaceBetween: 50,
+            },
+        },
+    });
+
     // --- Contact Form Logic ---
     const contactForm = document.getElementById('contact-form');
     const formStatus = document.getElementById('form-status');
