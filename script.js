@@ -39,6 +39,65 @@ document.addEventListener('DOMContentLoaded', function () {
         },
     });
 
+    // --- Contact Form Logic ---
+    const contactForm = document.getElementById('contact-form');
+    const formStatus = document.getElementById('form-status');
+
+    if (contactForm) {
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const formData = new FormData(contactForm);
+            const name = formData.get('name').trim();
+            const email = formData.get('email').trim();
+            const subject = formData.get('subject').trim();
+            const message = formData.get('message').trim();
+
+            if (!name || !email || !subject || !message) {
+                formStatus.innerHTML = `<p class="text-red-500">Please fill out all fields.</p>`;
+                return;
+            }
+
+            const submitButton = contactForm.querySelector('button[type="submit"]');
+            const originalButtonHTML = submitButton.innerHTML;
+
+            // Disable button and show loading state
+            submitButton.disabled = true;
+            submitButton.innerHTML = `<i class="fas fa-spinner fa-spin mr-2"></i> Sending...`;
+            formStatus.innerHTML = ''; // Clear previous status
+
+            // Send data to Formspree
+            fetch(contactForm.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            }).then(response => {
+                if (response.ok) {
+                    formStatus.innerHTML = `<p class="text-green-600">Message sent successfully! We will get back to you shortly.</p>`;
+                    contactForm.reset();
+                } else {
+                    response.json().then(data => {
+                        if (Object.hasOwn(data, 'errors')) {
+                            formStatus.innerHTML = data["errors"].map(error => error["message"]).join(", ");
+                        } else {
+                            formStatus.innerHTML = `<p class="text-red-500">Oops! There was a problem submitting your form.</p>`;
+                        }
+                    });
+                }
+            }).catch(error => {
+                formStatus.innerHTML = `<p class="text-red-500">Oops! There was a network error. Please try again.</p>`;
+            }).finally(() => {
+                // Restore button state
+                submitButton.disabled = false;
+                submitButton.innerHTML = originalButtonHTML;
+                // Hide status message after 5 seconds
+                setTimeout(() => { formStatus.innerHTML = ''; }, 5000);
+            });
+        });
+    }
+
     // --- Tracking Form Logic ---
     const trackingForm = document.getElementById('tracking-form');
     const trackingInput = document.getElementById('tracking-number');
