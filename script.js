@@ -78,7 +78,12 @@ document.addEventListener('DOMContentLoaded', function () {
             const subject = formData.get('subject').trim();
             const message = formData.get('message').trim();
 
-            if (!name || !email || !subject || !message) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const isValidEmail = emailRegex.test(email);
+
+            if (!name || !email || !subject || !message || !isValidEmail) {
+                formStatus.innerHTML = isValidEmail
+                    ? `<p class="text-red-500">Please fill out all fields.</p>` : `<p class="text-red-500">Please enter a valid email address.</p>`;
                 formStatus.innerHTML = `<p class="text-red-500">Please fill out all fields.</p>`;
                 return;
             }
