@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function displayTrackingResults(trackingNumber) {
         // Dummy data for demonstration. In a real app, you'd fetch this from an API.
         const trackingData = {
-            'MJ123456789': {
+            'MJ454321879': {
                 status: 'In Transit',
                 origin: 'New York, USA',
                 destination: 'London, UK',
